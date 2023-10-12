@@ -1,0 +1,5 @@
+name: ConSpigot
+version: '${project.version}'
+main: me.xap3y.conspigot.Main
+authors: [XAP3Y]
+website: https://xap3y.fun
