@@ -50,9 +50,9 @@ ws://localhost:3001 response:
   "cpu": 66.66666666666666,
   "mem":
   {
-    "total": 829,
-    "free": 240,
-    "usage": 0
+    "total": 2048,
+    "free": 253.82964324951172,
+    "usage": 1794.1703567504883
   },
   "onlinePlayers":
   [{
