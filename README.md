@@ -31,8 +31,9 @@ JSON structure:
 Example:
 
 ```
+ws://localhost:3001 response:
 {
-"server":
+  "server":
   {
     "name": "Paper",
     "version": "git-Paper-550 (MC: 1.19.4)",
@@ -40,20 +41,20 @@ Example:
     "ip": "",
     "port": 25565
   },
-"tps":
+  "tps":
   {
     "1m": 20.01932518912104,
     "5m": 20.003862052428467,
     "15m": 20.00128718510361
   },
-"cpu": 66.66666666666666,
-"mem":
+  "cpu": 66.66666666666666,
+  "mem":
   {
     "total": 829,
     "free": 240,
     "usage": 0
   },
-"onlinePlayers":
+  "onlinePlayers":
   [{
     "name": "XAP3Y",
     "displayName": "XAP3Y",
@@ -62,7 +63,7 @@ Example:
     "food": 20,
     "OP": true
   }],
-"offlinePlayers":
+  "offlinePlayers":
   [{
     "name": "XAP3Y",
     "uuid": "f1c3931e-93d3-4125-8fdc-9b1dc39bc4d6",
