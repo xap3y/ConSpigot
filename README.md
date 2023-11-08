@@ -11,8 +11,21 @@ JSON structure:
     free: double,
     usage: double
   },
-  offlinePlayers: [{OP: bool, banned: bool, name: string, uuid: string, whitelisted: bool}],
-  onlinePlayers: [{OP: bool, displayName: string, food: integer, health: integer, name: string, uuid: string}],
+  offlinePlayers: [{
+    OP: bool,
+    banned: bool,
+    name: string,
+    uuid: string,
+    whitelisted: bool
+  }],
+  onlinePlayers: [{
+    OP: bool,
+    displayName: string,
+    food: integer,
+    health: integer,
+    name: string,
+    uuid: string
+  }],
   server: {
     bukkitVersion: string,
     IP: string,
@@ -33,29 +46,25 @@ Example:
 ```
 ws://localhost:3001 response:
 {
-  "server":
-  {
+  "server": {
     "name": "Paper",
     "version": "git-Paper-550 (MC: 1.19.4)",
     "bukkitVersion": "1.19.4-R0.1-SNAPSHOT",
-    "ip": "",
-    "port": 25565
+    "ip": "172.10.10.252",
+    "port": 25570
   },
-  "tps":
-  {
+  "tps": {
     "1m": 20.01932518912104,
     "5m": 20.003862052428467,
     "15m": 20.00128718510361
   },
   "cpu": 66.66666666666666,
-  "mem":
-  {
+  "mem": {
     "total": 2048,
     "free": 253.82964324951172,
     "usage": 1794.1703567504883
   },
-  "onlinePlayers":
-  [{
+  "onlinePlayers": [{
     "name": "XAP3Y",
     "displayName": "XAP3Y",
     "uuid": "f1c3931e-93d3-4125-8fdc-9b1dc39bc4d6",
@@ -63,8 +72,7 @@ ws://localhost:3001 response:
     "food": 20,
     "OP": true
   }],
-  "offlinePlayers":
-  [{
+  "offlinePlayers": [{
     "name": "XAP3Y",
     "uuid": "f1c3931e-93d3-4125-8fdc-9b1dc39bc4d6",
     "banned": false,
