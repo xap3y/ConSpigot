@@ -8,9 +8,9 @@ class PlayerList {
     companion object {
 
         fun getOnlinePlayers():JsonArray{
-            val players = Bukkit.getOnlinePlayers();
-            val PlayerArrs = JsonArray();
-            if (players.isEmpty()) return PlayerArrs;
+            val players = Bukkit.getOnlinePlayers()
+            val PlayerArrs = JsonArray()
+            if (players.isEmpty()) return PlayerArrs
             players.forEach {
                 val playerObj = JsonObject()
                 playerObj.addProperty("name", it.name)
@@ -21,13 +21,13 @@ class PlayerList {
                 playerObj.addProperty("OP", it.isOp)
                 PlayerArrs.add(playerObj)
             }
-            return PlayerArrs;
+            return PlayerArrs
         }
 
         fun getOfflinePlayers():JsonArray{
-            val players = Bukkit.getOfflinePlayers();
-            val PlayerArrs = JsonArray();
-            if (players.isEmpty()) return PlayerArrs;
+            val players = Bukkit.getOfflinePlayers()
+            val PlayerArrs = JsonArray()
+            if (players.isEmpty()) return PlayerArrs
             players.forEach {
                 val playerObj = JsonObject()
                 playerObj.addProperty("name", it.name)
@@ -37,7 +37,7 @@ class PlayerList {
                 playerObj.addProperty("OP", it.isOp)
                 PlayerArrs.add(playerObj)
             }
-            return PlayerArrs;
+            return PlayerArrs
         }
     }
 }

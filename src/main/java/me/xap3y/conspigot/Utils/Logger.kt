@@ -4,7 +4,7 @@ import org.bukkit.Bukkit
 
 class Logger {
     companion object {
-        private const val prefix = "[ConSpigot] ";
+        private const val prefix = "[ConSpigot] "
         fun info(msg: String){
             Bukkit.getServer().consoleSender.sendMessage(Colors.colored(prefix + msg))
         }

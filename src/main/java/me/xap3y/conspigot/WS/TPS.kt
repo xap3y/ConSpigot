@@ -6,16 +6,15 @@ import org.bukkit.Bukkit
 class TPS {
     companion object {
         fun sendTPS(): JsonObject {
-            val tps = getTPS();
-            return tps;
+            return getTPS()
         }
 
         private fun getTPS(): JsonObject {
-            val tps = Bukkit.getServer().tps;
+            val tps = Bukkit.getServer().tps
             val tpsObj = JsonObject()
-            tpsObj.addProperty("1m", tps[0])
-            tpsObj.addProperty("5m", tps[1])
-            tpsObj.addProperty("15m", tps[2])
+            tpsObj.addProperty("1m", String.format("%.2f", tps[0]).toDouble())
+            tpsObj.addProperty("5m", String.format("%.2f", tps[1]).toDouble())
+            tpsObj.addProperty("15m", String.format("%.2f", tps[2]).toDouble())
             return tpsObj
         }
     }

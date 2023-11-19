@@ -4,7 +4,7 @@ import org.bukkit.ChatColor
 class Colors {
     companion object {
         fun colored(msg: String): String {
-            return ChatColor.translateAlternateColorCodes('&', msg);
+            return ChatColor.translateAlternateColorCodes('&', msg)
         }
     }
 }

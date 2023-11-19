@@ -11,7 +11,8 @@ class Main : JavaPlugin() {
     private var server: WSServer? = null
     private var serverThread: Thread? = null
     override fun onEnable() {
-        Logger.info("&aLoaded. &fMade by XAP3Y");
+        Logger.info("&aLoaded. &fMade by XAP3Y")
+
         val serverAddress = InetSocketAddress("0.0.0.0", Config.port)
 
         server = WSServer(serverAddress)
@@ -28,9 +29,9 @@ class Main : JavaPlugin() {
     }
 
     override fun onDisable() {
-        if (Config.debug) Logger.info("Closing server..");
+        if (Config.debug) Logger.info("Closing server..")
         server?.stop(1000)
-        serverThread = null;
-        if (Config.debug) Logger.info("Server closed!");
+        serverThread = null
+        if (Config.debug) Logger.info("Server closed!")
     }
 }
