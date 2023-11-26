@@ -12,9 +12,10 @@ class ReloadConfig(private val plugin: Statuer) : CommandExecutor {
         if (command.name.equals("Statuer", ignoreCase = true)) {
             if (sender.hasPermission("statuer.reload")) {
                 plugin.reloadConfiguration()
-                sender.sendMessage(Colors.colored("&fPlugin reloaded!"))
+                //Config?.messages?.first()?.ConfigReload ?: "&aConfig reloaded"
+                sender.sendMessage(Colors.colored(plugin.Config?.messages?.ConfigReload ?: "&aConfig reloaded"))
             } else {
-                sender.sendMessage(Colors.colored(plugin.Config?.messages?.first()?.NoPermissions ?: "&cNoPermissions!"))
+                sender.sendMessage(Colors.colored(plugin.Config?.messages?.NoPermissions ?: "&cNoPermissions!"))
             }
             return true
         }

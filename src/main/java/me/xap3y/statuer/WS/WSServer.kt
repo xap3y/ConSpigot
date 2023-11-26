@@ -1,9 +1,7 @@
 package me.xap3y.statuer.WS
 
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.Utils.Utils
@@ -43,9 +41,18 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure) 
     }
 
     override fun onMessage(conn: WebSocket, message: String) {
-        //Logger.info(message)
+        //Logger.info("TPS:")
+        //Logger.info(TPS.sendTPS().toString())
+
         val gson = Gson()
-        val obj = gson.fromJson(message, Map::class.java)
+        val obj: Map<*, *> =
+        try {
+            gson.fromJson(message, Map::class.java)
+        } catch (e: java.lang.Exception) {
+            sendToClient(conn, Utils.errObj("Invalid message JSON", "req_error"))
+            return
+        }
+
         val type = obj["type"].toString()
 
         if (type == "command"){
@@ -100,7 +107,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure) 
     }
 
     override fun onStart() {
-        Logger.info("Socket opened")
+        if(Config.logLevel >= 2) Logger.info("Socket opened")
     }
 
     private fun sendToClient(conn: WebSocket, content: JsonObject) {
@@ -113,12 +120,21 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure) 
 
     private fun getAll(): JsonObject {
         val allInObj = JsonObject()
-        allInObj.add("server", ServerInfo.getInfo())
-        //allInObj.add("tps", TPS.sendTPS())
-        allInObj.addProperty("cpu", CPUMEMusage.getCpuUsage())
-        allInObj.add("mem", CPUMEMusage.getMemObj())
-        allInObj.add("onlinePlayers", PlayerList.getOnlinePlayers())
-        allInObj.add("offlinePlayers", PlayerList.getOfflinePlayers())
+        val _temp = Config.modules
+        if(
+            _temp.serverName ||
+            _temp.serverIP ||
+            _temp.serverPort ||
+            _temp.serverVersion ||
+            _temp.bukkitVersion ||
+            _temp.maxPlayers ||
+            _temp.currentPlayers
+            ) allInObj.add("server", ServerInfo.getInfo(Config))
+        if(_temp.tps) allInObj.add("tps", TPS.sendTPS())
+        if(_temp.cpuLoad) allInObj.addProperty("cpu", CPUMEMusage.getCpuUsage())
+        if(_temp.memory) allInObj.add("mem", CPUMEMusage.getMemObj())
+        if(_temp.onlinePlayers) allInObj.add("onlinePlayers", PlayerList.getOnlinePlayers())
+        if(_temp.offlinePlayers) allInObj.add("offlinePlayers", PlayerList.getOfflinePlayers())
         return allInObj
     }
 }

@@ -1,6 +1,6 @@
 # ConSpigot
 
-Create WebSocket on **0.0.0.0:3001** <br>
+Create WebSocket on **0.0.0.0:8080** <br>
 Send JSON to opened connection.
 JSON structure:
 ```
@@ -34,9 +34,7 @@ JSON structure:
     version: string
   },
   tps: {
-    1m: double,
-    5m: double,
-    15m : double
+    1m: double
   }
 }
 ```
@@ -44,7 +42,7 @@ JSON structure:
 Example:
 
 ```
-ws://localhost:3001 response:
+ws://localhost:8080 response:
 {
   "server": {
     "name": "Paper",
@@ -54,15 +52,13 @@ ws://localhost:3001 response:
     "port": 25570
   },
   "tps": {
-    "1m": 20.01932518912104,
-    "5m": 20.003862052428467,
-    "15m": 20.00128718510361
+    "1m": 19.94
   },
-  "cpu": 66.66666666666666,
+  "cpu": 0.0,
   "mem": {
-    "total": 2048,
-    "free": 253.82964324951172,
-    "usage": 1794.1703567504883
+    "total": 7106.0,
+    "free": 1208.5,
+    "usage": 5897.5
   },
   "onlinePlayers": [{
     "name": "XAP3Y",

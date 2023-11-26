@@ -1,11 +1,12 @@
 package me.xap3y.statuer.WS
 
 import com.google.gson.JsonObject
+import me.xap3y.statuer.Config.ConfigStructure
 import org.bukkit.Bukkit
 
 class ServerInfo {
     companion object {
-        fun getInfo(): JsonObject {
+        fun getInfo(config: ConfigStructure): JsonObject {
             val name = Bukkit.getServer().name
             val version = Bukkit.getServer().version
             val bukkitVersion = Bukkit.getServer().bukkitVersion
@@ -14,14 +15,13 @@ class ServerInfo {
             val maxPlayers = Bukkit.getServer().maxPlayers
             val currentPlayers = Bukkit.getServer().onlinePlayers.size
             val srvOgj = JsonObject()
-            srvOgj.addProperty("name", name)
-            srvOgj.addProperty("version", version)
-            srvOgj.addProperty("bukkitVersion", bukkitVersion)
-            srvOgj.addProperty("version", version)
-            srvOgj.addProperty("ip", ip)
-            srvOgj.addProperty("port", port)
-            srvOgj.addProperty("maxPlayers", maxPlayers)
-            srvOgj.addProperty("currentPlayers", currentPlayers)
+            if(config.modules.serverName) srvOgj.addProperty("name", name)
+            if(config.modules.serverVersion) srvOgj.addProperty("version", version)
+            if(config.modules.bukkitVersion) srvOgj.addProperty("bukkitVersion", bukkitVersion)
+            if(config.modules.serverIP) srvOgj.addProperty("ip", ip)
+            if(config.modules.serverPort) srvOgj.addProperty("port", port)
+            if(config.modules.maxPlayers) srvOgj.addProperty("maxPlayers", maxPlayers)
+            if(config.modules.currentPlayers) srvOgj.addProperty("currentPlayers", currentPlayers)
             return srvOgj
         }
     }

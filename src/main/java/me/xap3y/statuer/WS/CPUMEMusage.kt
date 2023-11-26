@@ -6,11 +6,12 @@ import java.lang.management.ManagementFactory
 
 class CPUMEMusage {
     companion object {
+        private var runtime= Runtime.getRuntime()
         private var osMxBean: OperatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean() as OperatingSystemMXBean
         private val cpu = this.osMxBean.processCpuLoad
-        private val memTotal = Runtime.getRuntime().maxMemory() / (1024.0 * 1024.0)
-        private val memFree = Runtime.getRuntime().freeMemory() / (1024.0 * 1024.0)
-        private val memUsage = (memTotal - memFree)
+        private val memTotal = runtime.maxMemory() / (1024.0 * 1024.0)
+        private var memFree: Double = 0.0
+        private var memUsage: Double = 0.0
         private val uptime = this.osMxBean.processCpuTime;
         private val loadAverage = this.osMxBean.systemLoadAverage
         private val name = this.osMxBean.name;
@@ -20,6 +21,10 @@ class CPUMEMusage {
         }
 
         fun getMemObj(): JsonObject {
+            //runtime.gc()
+            System.gc()
+            memFree = runtime.freeMemory() / (1024.0 * 1024.0)
+            memUsage = (memTotal - memFree)
             val memObj = JsonObject()
             memObj.addProperty("total", memTotal)
             memObj.addProperty("free", String.format("%.2f", memFree).toDouble())
