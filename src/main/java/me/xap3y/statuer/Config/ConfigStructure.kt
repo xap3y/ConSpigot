@@ -6,6 +6,8 @@ data class ConfigStructure(
     val serverPort: Int,
     val SocketAddress: String,
     val SocketPort: Int,
+    val passRequired: Boolean,
+    val password: String,
     val logLevel: Int,
     val messages: List<Message>
 )

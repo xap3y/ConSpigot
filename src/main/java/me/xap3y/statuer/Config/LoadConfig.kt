@@ -16,7 +16,9 @@ class LoadConfig {
                     "localhost",
                     25565,
                     "0.0.0.0",
-                    3000,
+                    8080,
+                    true,
+                    "Password123",
                     1,
                     listOf(
                         Message(
