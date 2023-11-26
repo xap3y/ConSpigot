@@ -41,8 +41,6 @@ Create WebSocket on **0.0.0.0:8080** <br>
 }
 ```
 </details>
-<br>
-
 <details>
   <summary>Example of JSON:</summary>
   
@@ -79,6 +77,46 @@ Create WebSocket on **0.0.0.0:8080** <br>
     "whitelisted": false,
     "OP": true
   }]
+}
+```
+</details>
+<details>
+  <summary>Default config.json</summary>
+  
+```
+{
+    "serverName": "Lobby",
+    "serverIP": "localhost",
+    "serverPort": 25565,
+    "SocketAddress": "0.0.0.0",
+    "SocketPort": 8080,
+    "passRequired": true,
+    "password": "Password123",
+    "logLevel": 1,
+    "messages": {
+        "serverStopped": "Server stopped",
+        "StartingThread": "Starting websocker server...",
+        "StartingWebsocket": "Starting websocker server thread...",
+        "StartedThread": "&a&lStarted websocker server thread.",
+        "StartedWebsocket": "&a&lStarted websocker server. %a",
+        "ConfigReload": "&aConfiguration reloaded",
+        "NoPermissions": "&cNo permissions!"
+    },
+    "modules": {
+        "tps": true,
+        "memory": true,
+        "onlinePlayers": true,
+        "offlinePlayers": true,
+        "serverName": true,
+        "serverVersion": true,
+        "bukkitVersion": true,
+        "serverIP": true,
+        "serverPort": true,
+        "maxPlayers": true,
+        "currentPlayers": true,
+        "cpuLoad": true,
+        "uptime": true
+    }
 }
 ```
 </details>
