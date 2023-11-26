@@ -1,8 +1,10 @@
 # ConSpigot
 
 Create WebSocket on **0.0.0.0:8080** <br>
-Send JSON to opened connection.
-JSON structure:
+
+<details>
+  <summary>JSON structure:</summary>
+  
 ```
 {
   cpu: integer,
@@ -38,11 +40,13 @@ JSON structure:
   }
 }
 ```
+</details>
 <br>
-Example:
 
+<details>
+  <summary>Example of JSON:</summary>
+  
 ```
-ws://localhost:8080 response:
 {
   "server": {
     "name": "Paper",
@@ -77,3 +81,4 @@ ws://localhost:8080 response:
   }]
 }
 ```
+</details>
