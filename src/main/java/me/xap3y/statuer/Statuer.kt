@@ -13,6 +13,7 @@ import java.net.InetSocketAddress
 
 class Statuer : JavaPlugin() {
     private val configFile = File(dataFolder, "config.json")
+    val loggingFile = File(dataFolder, "logs.txt")
     private var server: WSServer? = null
     private var serverThread: Thread? = null
     private lateinit var serverAddress: InetSocketAddress
@@ -30,7 +31,7 @@ class Statuer : JavaPlugin() {
         }
         server = null;
         serverAddress = InetSocketAddress(Config!!.SocketAddress, Config!!.SocketPort)
-        server = WSServer(serverAddress, Config!!)
+        server = WSServer(serverAddress, Config!!, this)
         serverThread = Thread {
             //Logger.info(Config?.messages?.first()?.StartingWebsocket ?: "Websocket starting....")
             server?.start()
@@ -57,7 +58,7 @@ class Statuer : JavaPlugin() {
 
             serverAddress = InetSocketAddress(Config!!.SocketAddress, Config!!.SocketPort)
 
-            server = WSServer(serverAddress, Config!!)
+            server = WSServer(serverAddress, Config!!, this)
 
             serverThread = Thread {
                 Logger.info(Config?.messages?.StartingWebsocket ?: "Websocket starting....")

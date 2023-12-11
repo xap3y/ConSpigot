@@ -9,8 +9,8 @@ class PlayerList {
 
         fun getOnlinePlayers(): JsonArray {
             val players = Bukkit.getOnlinePlayers()
-            val PlayerArrs = JsonArray()
-            if (players.isEmpty()) return PlayerArrs
+            val playerArrs = JsonArray()
+            if (players.isEmpty()) return playerArrs
             players.forEach {
                 val playerObj = JsonObject()
                 playerObj.addProperty("name", it.name)
@@ -19,15 +19,15 @@ class PlayerList {
                 playerObj.addProperty("health", it.health)
                 playerObj.addProperty("food", it.foodLevel)
                 playerObj.addProperty("OP", it.isOp)
-                PlayerArrs.add(playerObj)
+                playerArrs.add(playerObj)
             }
-            return PlayerArrs
+            return playerArrs
         }
 
         fun getOfflinePlayers(): JsonArray {
             val players = Bukkit.getOfflinePlayers()
-            val PlayerArrs = JsonArray()
-            if (players.isEmpty()) return PlayerArrs
+            val playerArrs = JsonArray()
+            if (players.isEmpty()) return playerArrs
             players.forEach {
                 val playerObj = JsonObject()
                 playerObj.addProperty("name", it.name)
@@ -35,9 +35,9 @@ class PlayerList {
                 playerObj.addProperty("banned", it.isBanned)
                 playerObj.addProperty("whitelisted", it.isWhitelisted)
                 playerObj.addProperty("OP", it.isOp)
-                PlayerArrs.add(playerObj)
+                playerArrs.add(playerObj)
             }
-            return PlayerArrs
+            return playerArrs
         }
     }
 }
