@@ -4,12 +4,11 @@ import com.google.gson.Gson
 import me.xap3y.statuer.Config.SaveConfig.Companion.SaveConfig
 import java.io.File
 import java.io.FileReader
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 import me.xap3y.statuer.Utils.Logger
 
+@Suppress("FunctionName")
 class LoadConfig {
     companion object {
         private val gson = Gson()
@@ -47,13 +46,15 @@ class LoadConfig {
                 uptime = true
             )
         )
+        @JvmStatic
         fun LoadConfig(file: File): ConfigStructure? {
 
             if (!file.exists()) {
                 val json = Json { prettyPrint = true }
                 val jsonString = json.encodeToString(defaultConfig)
-
-                SaveConfig(jsonString, file)
+                if (!SaveConfig(jsonString, file)){
+                    Logger.error("There was error creating config file!")
+                }
             }
 
             return try {

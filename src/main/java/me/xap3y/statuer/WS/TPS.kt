@@ -28,11 +28,13 @@ class TPS {
             */
             //val tps = Bukkit.getServer().tps
 
-            val tps = Lag.getTPS()
+            val tps = arrayOf(Lag.getTPS(Lag.TICKS_PER_MINUTE), Lag.getTPS(Lag.TICKS_5_MINUTES), Lag.getTPS(Lag.TICKS_15_MINUTES))
 
 
             val tpsObj = JsonObject()
-            tpsObj.addProperty("1m", String.format("%.2f", tps).toDouble())
+            tpsObj.addProperty("1m", String.format("%.2f", tps[0]).toDouble())
+            tpsObj.addProperty("5m", String.format("%.2f", tps[0]).toDouble())
+            tpsObj.addProperty("15m", String.format("%.2f", tps[0]).toDouble())
             return tpsObj
         }
 

@@ -1,20 +1,22 @@
 package me.xap3y.statuer.WS
 
-import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.google.gson.*
 import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Statuer
 import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.Utils.Utils
 import me.xap3y.statuer.Utils.WSResObj
+import me.xap3y.statuer.Utils.Worlds
+import me.xap3y.statuer.Utils.Worlds.Companion.getWorlds
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
 import java.io.File
 import java.net.InetSocketAddress
 import java.security.MessageDigest
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.UUID;
+
 
 class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, private val plugin: Statuer) : WebSocketServer(address) {
     private val connectionTokenMap = ConcurrentHashMap<WebSocket, String>()
@@ -25,7 +27,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         val token = sha512(UUID.randomUUID().toString())
         connectionTokenMap[conn] = token
 
-        Logger.info("WS TOKEN for conn $conn is $token")
+        //Logger.info("WS TOKEN for conn $conn is $token")
 
         sendToClient(conn, WSResObj()
             .addProperty("type", "success")
@@ -63,7 +65,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
     override fun onMessage(conn: WebSocket, message: String) {
         //Logger.info("TPS:")
         //Logger.info(TPS.sendTPS().toString())
-        val token = connectionTokenMap[conn]
+        //val token = connectionTokenMap[conn]
         val gson = Gson()
         val obj: Map<*, *> =
         try {
@@ -77,14 +79,14 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
             return
         }
 
-        Logger.info("message: $message")
+        //Logger.info("message: $message")
 
         val type = obj["type"].toString()
 
         if (type == "command"){
-            Logger.info("Got command message")
+            if(!checkPass(obj["password"].toString(), conn)) return
             if(Utils.executeCMD(obj["command"].toString())){
-                Logger.info("CMD EXECUTED")
+                //Logger.info("CMD EXECUTED")
 
                 sendToClient(conn, WSResObj()
                     .addProperty("type", "success")
@@ -102,6 +104,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
 
         } else if (type == "player_kick"){
+            if(!checkPass(obj["password"].toString(), conn)) return
             val response = PlayerActions.Kick(obj["player"].toString(), obj["reason"].toString())
             if (response != "1"){
                 sendToClient(conn, WSResObj()
@@ -120,16 +123,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
         } else if (type == "get_info") {
             //Logger.info("GetINFO")
-            val password = obj["password"].toString()
-            if (Config.passRequired && Config.password != password) {
-                //Logger.info("PASSWORD DOESNT MATCH")
-                sendToClient(conn, WSResObj()
-                    .addProperty("type", "error")
-                    .addProperty("cause", "invalid password")
-                    .build()
-                )
-                return
-            }
+            if(!checkPass(obj["password"].toString(), conn)) return
             val allInOneObj = getAll()
             Logger.logFile(allInOneObj.toString(), File(plugin.dataFolder, "ws.txt"))
             sendToClient(conn, allInOneObj)
@@ -179,6 +173,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         if(_temp.memory) allInObj.add("mem", CPUMEMusage.getMemObj())
         if(_temp.onlinePlayers) allInObj.add("onlinePlayers", PlayerList.getOnlinePlayers())
         if(_temp.offlinePlayers) allInObj.add("offlinePlayers", PlayerList.getOfflinePlayers())
+        allInObj.add("worlds", getWorlds())
         return allInObj
     }
 
@@ -190,5 +185,18 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
                     .toString(16)
                     .substring(1)
             }
+    }
+
+    private fun checkPass(pass: String, conn: WebSocket? = null): Boolean {
+        if (!Config.passRequired) return true
+        val isPassValid = (Config.password == pass)
+        if (conn != null && !isPassValid) {
+            sendToClient(conn, WSResObj()
+                .addProperty("type", "error")
+                .addProperty("cause", "invalid password")
+                .build()
+            )
+        }
+        return isPassValid
     }
 }

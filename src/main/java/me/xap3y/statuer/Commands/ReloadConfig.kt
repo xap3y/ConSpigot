@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender
 class ReloadConfig(private val plugin: Statuer) : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (command.name.equals("Statuer", ignoreCase = true)) {
-            if (sender.hasPermission("statuer.reload")) {
+            if (sender.hasPermission("statuer.reload") || sender.hasPermission("statuer.*")) {
                 plugin.reloadConfiguration()
                 //Config?.messages?.first()?.ConfigReload ?: "&aConfig reloaded"
                 sender.sendMessage(Colors.colored(plugin.Config?.messages?.ConfigReload ?: "&aConfig reloaded"))

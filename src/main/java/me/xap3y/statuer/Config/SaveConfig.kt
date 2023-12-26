@@ -4,11 +4,14 @@ import java.io.File
 
 class SaveConfig {
     companion object{
-        fun SaveConfig(config: String, file: File) {
-            try {
+        @JvmStatic
+        fun SaveConfig(config: String, file: File): Boolean {
+            return try {
                 file.writeText(config)
+                true
             } catch (ex: Exception) {
                 ex.printStackTrace()
+                false
             }
         }
     }

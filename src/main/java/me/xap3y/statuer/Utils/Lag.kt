@@ -2,34 +2,26 @@ package me.xap3y.statuer.Utils
 
 class Lag: Runnable {
     companion object {
-        var TICK_COUNT = 0
-        val TICKS = LongArray(600)
-        var LAST_TICK = 0L
+        const val TICK_INTERVAL = 1L
+        const val TICKS_PER_MINUTE = 60
+        const val TICKS_5_MINUTES = 5 * TICKS_PER_MINUTE
+        const val TICKS_15_MINUTES = 15 * TICKS_PER_MINUTE
 
-        fun getTPS(): Double {
-            return getTPS(100)
-        }
+        private var TICK_COUNT = 0
+        private val TICKS = LongArray(TICKS_15_MINUTES)
 
         fun getTPS(ticks: Int): Double {
             if (TICK_COUNT < ticks) {
                 return 20.0
             }
             val target = (TICK_COUNT - 1 - ticks) % TICKS.size
-            val elapsed = System.currentTimeMillis() - TICKS[target]
-            return ticks / (elapsed / 1000.0)
-        }
-
-        fun getElapsed(tickID: Int): Long {
-            if (TICK_COUNT - tickID >= TICKS.size) {
-                // Handle this case if needed
-            }
-
-            val time = TICKS[(tickID % TICKS.size)]
-            return System.currentTimeMillis() - time
+            val elapsed = System.nanoTime() - TICKS[target]
+            return ticks / (elapsed / 1.0e9)
         }
     }
+
     override fun run() {
-        TICKS[TICK_COUNT % TICKS.size] = System.currentTimeMillis()
+        TICKS[TICK_COUNT % TICKS.size] = System.nanoTime()
         TICK_COUNT += 1
     }
 }

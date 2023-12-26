@@ -6,6 +6,7 @@ import me.xap3y.statuer.Utils.Lag
 import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.WS.WSServer
 import org.bukkit.Bukkit
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.net.InetSocketAddress
@@ -49,7 +50,7 @@ class Statuer : JavaPlugin() {
         getCommand("Statuer")?.executor = ReloadConfig(this)
         dataFolder.mkdir()
 
-        Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(this, Lag(), 100L, 1L)
+        Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(this, Lag(), 100L, Lag.TICK_INTERVAL)
 
         Config = LoadConfig(configFile)
         if (Config == null) Logger.info("&4There was error loading config file!!")
