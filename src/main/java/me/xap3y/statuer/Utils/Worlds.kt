@@ -1,7 +1,7 @@
 package me.xap3y.statuer.Utils
 
 import com.google.gson.JsonArray
-import me.xap3y.statuer.WS.PlayerList.Companion.getFromList
+import me.xap3y.statuer.Utils.PlayerList.Companion.getFromList
 import org.bukkit.Bukkit
 
 class Worlds {

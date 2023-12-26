@@ -1,8 +1,7 @@
-package me.xap3y.statuer.WS
+package me.xap3y.statuer.Utils
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import kotlinx.serialization.json.Json
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player

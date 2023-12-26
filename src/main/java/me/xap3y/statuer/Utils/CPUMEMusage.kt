@@ -1,4 +1,4 @@
-package me.xap3y.statuer.WS
+package me.xap3y.statuer.Utils
 
 import com.google.gson.JsonObject
 import com.sun.management.OperatingSystemMXBean
@@ -8,16 +8,16 @@ class CPUMEMusage {
     companion object {
         private var runtime= Runtime.getRuntime()
         private var osMxBean: OperatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean() as OperatingSystemMXBean
-        private val cpu = this.osMxBean.processCpuLoad
+        private val cpu = osMxBean.processCpuLoad
         private val memTotal = runtime.maxMemory() / (1024.0 * 1024.0)
         private var memFree: Double = 0.0
         private var memUsage: Double = 0.0
-        private val uptime = this.osMxBean.processCpuTime;
-        private val loadAverage = this.osMxBean.systemLoadAverage
-        private val name = this.osMxBean.name;
+        private val uptime = osMxBean.processCpuTime;
+        private val loadAverage = osMxBean.systemLoadAverage
+        private val name = osMxBean.name;
 
         fun getCpuUsage(): Double{
-            return this.cpu * 100;
+            return cpu * 100;
         }
 
         fun getMemObj(): JsonObject {

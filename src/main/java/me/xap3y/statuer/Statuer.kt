@@ -6,7 +6,6 @@ import me.xap3y.statuer.Utils.Lag
 import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.WS.WSServer
 import org.bukkit.Bukkit
-import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.net.InetSocketAddress
@@ -31,7 +30,7 @@ class Statuer : JavaPlugin() {
             server!!.stop(1000)
         }
         server = null;
-        serverAddress = InetSocketAddress(Config!!.SocketAddress, Config!!.SocketPort)
+        serverAddress = InetSocketAddress(Config!!.socketAddress, Config!!.socketPort)
         server = WSServer(serverAddress, Config!!, this)
         serverThread = Thread {
             //Logger.info(Config?.messages?.first()?.StartingWebsocket ?: "Websocket starting....")
@@ -57,7 +56,7 @@ class Statuer : JavaPlugin() {
 
         if (Config != null) {
 
-            serverAddress = InetSocketAddress(Config!!.SocketAddress, Config!!.SocketPort)
+            serverAddress = InetSocketAddress(Config!!.socketAddress, Config!!.socketPort)
 
             server = WSServer(serverAddress, Config!!, this)
 
@@ -65,10 +64,10 @@ class Statuer : JavaPlugin() {
                 Logger.info(Config?.messages?.StartingWebsocket ?: "Websocket starting....")
                 server?.start()
                 Logger.info(
-                    Config?.messages?.StartedWebsocket?.replace("%a", "&e(${Config!!.SocketAddress}:${Config!!.SocketPort})")
-                        ?: "&a&lWebsocket started. &e(${Config!!.SocketAddress}:${Config!!.SocketPort})")
+                    Config?.messages?.StartedWebsocket?.replace("%a", "&e(${Config!!.socketAddress}:${Config!!.socketPort})")
+                        ?: "&a&lWebsocket started. &e(${Config!!.socketAddress}:${Config!!.socketPort})")
             }
-            Logger.info(Config?.messages?.StartingThread ?: "Websocket thread starting....")
+            Logger.info(Config?.messages?.startingThread ?: "Websocket thread starting....")
             serverThread?.start()
             Logger.info(Config?.messages?.StartedThread ?: "&a&lWebsocket thread started.")
         } else {

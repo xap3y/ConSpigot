@@ -1,13 +1,15 @@
 package me.xap3y.statuer.WS
 
+// No idea what I just did, but it works
+
 import com.google.gson.*
 import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Statuer
-import me.xap3y.statuer.Utils.Logger
-import me.xap3y.statuer.Utils.Utils
-import me.xap3y.statuer.Utils.WSResObj
-import me.xap3y.statuer.Utils.Worlds
+import me.xap3y.statuer.Utils.*
 import me.xap3y.statuer.Utils.Worlds.Companion.getWorlds
+import me.xap3y.statuer.WS.modules.Player.Companion.kick
+import me.xap3y.statuer.WS.modules.Player.Companion.permanentBan
+import me.xap3y.statuer.WS.modules.Player.Companion.tempBan
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
@@ -81,6 +83,13 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
         //Logger.info("message: $message")
 
+        if (!checkPass(obj["password"].toString(), conn)) return sendToClient(
+            conn, WSResObj()
+                .addProperty("type", "error")
+                .addProperty("cause", "invalid password")
+                .build()
+        )
+
         val type = obj["type"].toString()
 
         if (type == "command"){
@@ -103,23 +112,20 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
             }
 
 
-        } else if (type == "player_kick"){
-            if(!checkPass(obj["password"].toString(), conn)) return
-            val response = PlayerActions.Kick(obj["player"].toString(), obj["reason"].toString())
-            if (response != "1"){
-                sendToClient(conn, WSResObj()
-                    .addProperty("type", "error")
-                    .addProperty("cause", "Cannot kick player")
-                    .build()
-                )
-            } else {
-                sendToClient(conn, WSResObj()
-                    .addProperty("type", "success")
-                    .addProperty("response", "Player was kicked")
-                    .build()
-                )
-            }
+        } else if (type == "player_kick") {
+            sendToClient(conn, kick(obj))
 
+        } else if (type == "player_permanentBan") {
+            sendToClient(conn, permanentBan(obj))
+
+        } else if (type == "player_permanentIpBan") {
+            sendToClient(conn, permanentBan(obj, true))
+
+        } else if (type == "player_tempBan") {
+            sendToClient(conn, tempBan(obj, obj["duration"].toString().toInt()))
+
+        } else if (type == "player_tempIpBan") {
+            sendToClient(conn, tempBan(obj, obj["duration"].toString().toInt(), true))
 
         } else if (type == "get_info") {
             //Logger.info("GetINFO")
@@ -199,4 +205,5 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         }
         return isPassValid
     }
+
 }

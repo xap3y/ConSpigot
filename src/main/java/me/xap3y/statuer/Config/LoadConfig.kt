@@ -1,7 +1,7 @@
 package me.xap3y.statuer.Config
 
 import com.google.gson.Gson
-import me.xap3y.statuer.Config.SaveConfig.Companion.SaveConfig
+import me.xap3y.statuer.Config.SaveConfig.Companion.saveConfig
 import java.io.File
 import java.io.FileReader
 import kotlinx.serialization.json.Json
@@ -52,7 +52,7 @@ class LoadConfig {
             if (!file.exists()) {
                 val json = Json { prettyPrint = true }
                 val jsonString = json.encodeToString(defaultConfig)
-                if (!SaveConfig(jsonString, file)){
+                if (!saveConfig(jsonString, file)){
                     Logger.error("There was error creating config file!")
                 }
             }

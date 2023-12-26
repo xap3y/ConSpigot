@@ -6,8 +6,8 @@ data class ConfigStructure(
     val serverName: String,
     val serverIP: String,
     val serverPort: Int,
-    val SocketAddress: String,
-    val SocketPort: Int,
+    val socketAddress: String,
+    val socketPort: Int,
     val passRequired: Boolean,
     val password: String,
     val logLevel: Int,
@@ -18,7 +18,7 @@ data class ConfigStructure(
 @Serializable
 data class Message(
     val serverStopped: String,
-    val StartingThread: String,
+    val startingThread: String,
     val StartingWebsocket: String,
     val StartedThread: String,
     val StartedWebsocket: String,

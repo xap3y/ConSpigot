@@ -1,7 +1,6 @@
-package me.xap3y.statuer.WS
+package me.xap3y.statuer.Utils
 
 import com.google.gson.JsonObject
-import me.xap3y.statuer.Utils.Lag
 
 
 class TPS {
