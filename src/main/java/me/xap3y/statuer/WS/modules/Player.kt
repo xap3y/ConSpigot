@@ -1,7 +1,9 @@
 package me.xap3y.statuer.WS.modules
 
 import com.google.gson.JsonObject
+import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.Utils.PlayerActions
+import me.xap3y.statuer.Utils.PlayerActions.Companion.Kick
 import me.xap3y.statuer.Utils.ResObjs.Companion.getErrorObjRes
 import me.xap3y.statuer.Utils.ResObjs.Companion.getSuccessObjRes
 import me.xap3y.statuer.Utils.WSResObj
@@ -31,15 +33,24 @@ class Player {
             val bumper = StringUtils.repeat("\n", 35)
             val playerName = obj["player"].toString()
             val reason = obj["reason"].toString()
+            Logger.info("BANNING: $playerName")
+            Logger.info("REASON: $reason")
             val type = if (isIpBan) BanList.Type.IP else BanList.Type.NAME
             return try {
                 if (Bukkit.getBanList(type).isBanned(playerName)) {
+                    Logger.info("2")
                     return getErrorObjRes("Player $playerName is already banned!")
                 }
 
-                Bukkit.getBanList(type).addBan(playerName, bumper + reason + bumper, null, null)
+                Logger.info("1")
+                Bukkit.getBanList(type).addBan(playerName, reason, null, null)
+                if (Bukkit.getServer().getPlayer(playerName).isOnline) {
+                    Kick(playerName, reason)
+                }
+                Logger.info("2")
                 getSuccessObjRes("Player $playerName has been successfully banned with reason: $reason")
             } catch (e: Exception) {
+                Logger.info("4")
                 getErrorObjRes(e.message.toString())
             }
         }
@@ -56,7 +67,10 @@ class Player {
                     return getErrorObjRes("Player $playerName is already banned!")
                 }
 
-                Bukkit.getBanList(type).addBan(playerName, bumper + reason + bumper, date, null)
+                Bukkit.getBanList(type).addBan(playerName, reason, date, null)
+                if (Bukkit.getServer().getPlayer(playerName).isOnline) {
+                    Kick(playerName, reason)
+                }
                 getSuccessObjRes("Player $playerName has been successfully banned with reason: $reason for $duration minutes")
             } catch (e: Exception) {
                 getErrorObjRes(e.message.toString())

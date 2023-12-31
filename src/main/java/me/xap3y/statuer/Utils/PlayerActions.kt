@@ -4,14 +4,17 @@ import com.google.gson.JsonObject
 import me.xap3y.statuer.Utils.ResObjs.Companion.getErrorObjRes
 import me.xap3y.statuer.Utils.ResObjs.Companion.getSuccessObjRes
 import org.bukkit.Bukkit
+import org.bukkit.scheduler.BukkitRunnable
+
 
 @Suppress("FunctionName")
 class PlayerActions {
     companion object {
         fun MakeOP(player: String): Boolean {
-            return if (Utils.isOnline(player)) {
+            val onlinePlayer = Bukkit.getServer().getPlayer(player)
+            return if (onlinePlayer != null) {
                 //Utils.executeCMD("op $player")
-                Bukkit.getServer().getPlayer(player).isOp = true
+                onlinePlayer.isOp = true
                 true
             } else {
                 false
@@ -19,8 +22,15 @@ class PlayerActions {
         }
         @JvmStatic
         fun Kick(player: String, reason: String): JsonObject {
-            return if (Utils.isOnline(player)) {
-                Utils.executeCMD("kick $player $reason")
+            val onlinePlayer = Bukkit.getServer().getPlayer(player)
+            return if (onlinePlayer != null) {
+
+                object : BukkitRunnable() {
+                    override fun run() {
+                        onlinePlayer.kickPlayer(reason)
+                    }
+                }.runTask(Bukkit.getPluginManager().getPlugin("Statuer"))
+
                 getSuccessObjRes("Player $player has been kicked with reason: $reason")
             } else {
                 getErrorObjRes("Player $player is not online!")

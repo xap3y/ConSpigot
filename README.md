@@ -1,122 +1,37 @@
 # ConSpigot
 
-Create WebSocket on **0.0.0.0:8080** <br>
+Just a WebSocket creating bridge between minecraft server <br>
 
-<details>
-  <summary>JSON structure:</summary>
-  
-```
-{
-  cpu: integer,
-  mem: {
-    total: integer,
-    free: double,
-    usage: double
-  },
-  offlinePlayers: [{
-    OP: bool,
-    banned: bool,
-    name: string,
-    uuid: string,
-    whitelisted: bool
-  }],
-  onlinePlayers: [{
-    OP: bool,
-    displayName: string,
-    food: integer,
-    health: integer,
-    name: string,
-    uuid: string
-  }],
-  server: {
-    bukkitVersion: string,
-    IP: string,
-    name: string,
-    port: integer,
-    version: string
-  },
-  tps: {
-    1m: double
-  }
-}
-```
-</details>
-<details>
-  <summary>Example of JSON:</summary>
-  
-```
-{
-  "server": {
-    "name": "Paper",
-    "version": "git-Paper-550 (MC: 1.19.4)",
-    "bukkitVersion": "1.19.4-R0.1-SNAPSHOT",
-    "ip": "172.10.10.252",
-    "port": 25570
-  },
-  "tps": {
-    "1m": 19.94
-  },
-  "cpu": 0.0,
-  "mem": {
-    "total": 7106.0,
-    "free": 1208.5,
-    "usage": 5897.5
-  },
-  "onlinePlayers": [{
-    "name": "XAP3Y",
-    "displayName": "XAP3Y",
-    "uuid": "f1c3931e-93d3-4125-8fdc-9b1dc39bc4d6",
-    "health": 20.0,
-    "food": 20,
-    "OP": true
-  }],
-  "offlinePlayers": [{
-    "name": "XAP3Y",
-    "uuid": "f1c3931e-93d3-4125-8fdc-9b1dc39bc4d6",
-    "banned": false,
-    "whitelisted": false,
-    "OP": true
-  }]
-}
-```
-</details>
-<details>
-  <summary>Default config.json</summary>
-  
-```
-{
-    "serverName": "Lobby",
-    "serverIP": "localhost",
-    "serverPort": 25565,
-    "SocketAddress": "0.0.0.0",
-    "SocketPort": 8080,
-    "passRequired": true,
-    "password": "Password123",
-    "logLevel": 1,
-    "messages": {
-        "serverStopped": "Server stopped",
-        "StartingThread": "Starting websocker server...",
-        "StartingWebsocket": "Starting websocker server thread...",
-        "StartedThread": "&a&lStarted websocker server thread.",
-        "StartedWebsocket": "&a&lStarted websocker server. %a",
-        "ConfigReload": "&aConfiguration reloaded",
-        "NoPermissions": "&cNo permissions!"
-    },
-    "modules": {
-        "tps": true,
-        "memory": true,
-        "onlinePlayers": true,
-        "offlinePlayers": true,
-        "serverName": true,
-        "serverVersion": true,
-        "bukkitVersion": true,
-        "serverIP": true,
-        "serverPort": true,
-        "maxPlayers": true,
-        "currentPlayers": true,
-        "cpuLoad": true,
-        "uptime": true
-    }
-}
-```
-</details>
+### How to use
+
+Drop in into your plugins folder and configure stuff you need in plugins/Statuer/config.json <br>
+If you disable password required in config, anyone can control your server and grief it <br> 
+
+### Commands
+`/statuer` - Reload configuration <br>
+
+### Examples of usage
+
+<h5>Send this JSON as string to your websocket to kick specified player</h5>
+`{ "type": "player_kick", "player": "notch", "reason": "Noob!", "password": "your_pass_in_cfg"}`
+
+Successful response: <br>
+    `{ "error": false, "message": "Player notch has been kicked with reason: Noob!"}` 
+    
+Error response: <br>
+    `{ "error": true, "message": "Player notch is not online!"}` 
+
+<h5>To listen for events (like player joins/quits):</h5>
+`{ "type": "start_listener", "password": "your_cool_pass_in_cfg"}` 
+
+Player join: <br>
+`{ "type": "event_playerJoin", "player_info": { "name": "notch", .... } }`
+
+Player quit: <br>
+`{ "type": "event_playerQuit", "player_info": {"name": "notch", "display_name": "notch" }}`
+
+On chat message: <br>
+`{ "type": "event_chat", "player": "notch", "message": "Hello!"}`
+
+<br>
+That is not all, I'm just lazy to add it all here

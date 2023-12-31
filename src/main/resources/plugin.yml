@@ -6,3 +6,6 @@ commands:
   statuer:
     description: Reloads the plugin configuration
     usage: /statuer
+  Portunbind:
+    description: Unbinds the ws PORT
+    usage: /Portunbind

@@ -1,11 +1,16 @@
 package me.xap3y.statuer
 import me.xap3y.statuer.Commands.ReloadConfig
+import me.xap3y.statuer.Commands.UnbindPort
 import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Config.LoadConfig.Companion.LoadConfig
+import me.xap3y.statuer.Listeners.ChatListener
+import me.xap3y.statuer.Listeners.CommandListener
+import me.xap3y.statuer.Listeners.PlayerListener
 import me.xap3y.statuer.Utils.Lag
 import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.WS.WSServer
 import org.bukkit.Bukkit
+import org.bukkit.event.EventHandler
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.net.InetSocketAddress
@@ -45,8 +50,19 @@ class Statuer : JavaPlugin() {
         //Logger.info(Config?.messages?.first()?.ConfigReload ?: "&aConfig reloaded")
     }
 
+    fun unBindPort() {
+        server?.stop(100)
+        if (server != null) {
+            server!!.stop(1000)
+        }
+        server = null;
+        serverThread = null
+
+    }
+
     override fun onEnable() {
         getCommand("Statuer")?.executor = ReloadConfig(this)
+        getCommand("Portunbind")?.executor = UnbindPort(this)
         dataFolder.mkdir()
 
         Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(this, Lag(), 100L, Lag.TICK_INTERVAL)
@@ -55,6 +71,8 @@ class Statuer : JavaPlugin() {
         if (Config == null) Logger.info("&4There was error loading config file!!")
 
         if (Config != null) {
+
+            Logger.info(Config!!.socketAddress + " <<")
 
             serverAddress = InetSocketAddress(Config!!.socketAddress, Config!!.socketPort)
 
@@ -73,15 +91,19 @@ class Statuer : JavaPlugin() {
         } else {
             Logger.info("&cConfig file is null!")
         }
+
+        getServer().pluginManager.registerEvents(PlayerListener(server!!), this)
+        getServer().pluginManager.registerEvents(CommandListener(server!!), this)
+        getServer().pluginManager.registerEvents(ChatListener(server!!), this)
+
     }
 
     override fun onDisable() {
         Logger.info("&cGoodBye :((( ")
-        server?.stop(100)
+        server?.stop(200)
+        server = null
         serverThread = null
     }
-
-
 }
 
 

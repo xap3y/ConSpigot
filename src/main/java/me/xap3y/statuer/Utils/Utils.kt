@@ -9,7 +9,7 @@ class Utils {
         fun executeCMD(command: String): Boolean {
             return try {
                 val sender = Bukkit.getServer().consoleSender
-                val plugin: Statuer = Bukkit.getPluginManager().getPlugin("ConSpigot") as Statuer
+                val plugin: Statuer = Bukkit.getPluginManager().getPlugin("Statuer") as Statuer
                 Bukkit.getScheduler().callSyncMethod(plugin) { Bukkit.dispatchCommand(sender, command) }.get()
             } catch (e: Exception) {
                 false

@@ -7,13 +7,13 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 
 
-class ReloadConfig(private val plugin: Statuer) : CommandExecutor {
+class UnbindPort(private val plugin: Statuer) : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (command.name.equals("Statuer", ignoreCase = true)) {
-            if (sender.hasPermission("statuer.reload") || sender.hasPermission("statuer.*")) {
-                plugin.reloadConfiguration()
+        if (command.name.equals("Portunbind", ignoreCase = true)) {
+            if (sender.hasPermission("statuer.unbind") || sender.hasPermission("statuer.*")) {
+                plugin.unBindPort()
                 //Config?.messages?.first()?.ConfigReload ?: "&aConfig reloaded"
-                sender.sendMessage(Colors.colored(plugin.Config?.messages?.ConfigReload ?: "&aConfig reloaded"))
+                sender.sendMessage(Colors.colored("&aWebSocket port un-binded"))
             } else {
                 sender.sendMessage(Colors.colored(plugin.Config?.messages?.NoPermissions ?: "&cNoPermissions!"))
             }
