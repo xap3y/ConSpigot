@@ -1,5 +1,6 @@
 package me.xap3y.statuer.Utils
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 
 class ResObjs {
@@ -15,6 +16,20 @@ class ResObjs {
             return WSResObj()
                 .addProperty("error", false)
                 .addProperty("message", message)
+                .build()
+        }
+
+        fun getSuccessObjRes(message: JsonObject): JsonObject {
+            return WSResObj()
+                .addProperty("error", false)
+                .addArr("message", message)
+                .build()
+        }
+
+        fun getSuccessObjRes(message: JsonArray): JsonObject {
+            return WSResObj()
+                .addProperty("error", false)
+                .addArr("message", message)
                 .build()
         }
     }

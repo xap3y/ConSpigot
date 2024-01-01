@@ -134,9 +134,20 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         } else if (type == "player_tempIpBan") {
             sendToClient(conn, tempBan(obj, obj["duration"].toString().toInt(), true))
 
+        } else if (type == "get_ram") {
+            sendToClient(conn, getSuccessObjRes(CPUMEMusage.getMemObj()))
+
+        } else if (type == "get_tps") {
+            sendToClient(conn, getSuccessObjRes(TPS.sendTPS()))
+
+        } else if (type == "get_onlinePlayers") {
+            sendToClient(conn, getSuccessObjRes(PlayerList.getOnlinePlayers()))
+
+        } else if (type == "get_offlinePlayers") {
+            sendToClient(conn, getSuccessObjRes(PlayerList.getOfflinePlayers()))
+
         } else if (type == "get_info") {
             //Logger.info("GetINFO")
-            if(!checkPass(obj["password"].toString(), conn)) return
             val allInOneObj = getAll()
             Logger.logFile(allInOneObj.toString(), File(plugin.dataFolder, "ws.txt"))
             sendToClient(conn, allInOneObj)
@@ -166,7 +177,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
     private fun getAll(): JsonObject {
         val allInObj = JsonObject()
-        allInObj.addProperty("type", "success")
+        allInObj.addProperty("error", false)
         val _temp = Config.modules
         if(
             _temp.serverName ||

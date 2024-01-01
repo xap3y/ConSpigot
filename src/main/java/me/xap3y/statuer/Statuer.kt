@@ -10,7 +10,6 @@ import me.xap3y.statuer.Utils.Lag
 import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.WS.WSServer
 import org.bukkit.Bukkit
-import org.bukkit.event.EventHandler
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.net.InetSocketAddress
@@ -18,7 +17,6 @@ import java.net.InetSocketAddress
 
 class Statuer : JavaPlugin() {
     private val configFile = File(dataFolder, "config.json")
-    val loggingFile = File(dataFolder, "logs.txt")
     private var server: WSServer? = null
     private var serverThread: Thread? = null
     private lateinit var serverAddress: InetSocketAddress
@@ -55,7 +53,8 @@ class Statuer : JavaPlugin() {
         if (server != null) {
             server!!.stop(1000)
         }
-        server = null;
+        server?.stop()
+        server = null
         serverThread = null
 
     }
