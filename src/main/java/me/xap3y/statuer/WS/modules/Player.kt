@@ -2,12 +2,9 @@ package me.xap3y.statuer.WS.modules
 
 import com.google.gson.JsonObject
 import me.xap3y.statuer.Utils.Logger
-import me.xap3y.statuer.Utils.PlayerActions
 import me.xap3y.statuer.Utils.PlayerActions.Companion.Kick
 import me.xap3y.statuer.Utils.ResObjs.Companion.getErrorObjRes
 import me.xap3y.statuer.Utils.ResObjs.Companion.getSuccessObjRes
-import me.xap3y.statuer.Utils.WSResObj
-import org.apache.commons.lang.StringUtils
 import org.bukkit.BanList
 import org.bukkit.Bukkit
 import java.util.*
@@ -15,26 +12,33 @@ import java.util.*
 class Player {
     companion object {
         fun kick(obj: Map<*, *>): JsonObject {
-            val response = PlayerActions.Kick(obj["player"].toString(), obj["reason"].toString())
+            val playerName = obj["player"].toString()
+            val reason = obj["reason"].toString()
+
+            Logger.info("REASON: $reason")
+
+            if (playerName.isBlank()) return getErrorObjRes("Player name cannot be empty!")
+            if (reason.isBlank()) return getErrorObjRes("Reason cannot be empty!")
+
+            val response = Kick(playerName, reason)
+
             return if (response.get("error").asBoolean) {
-                WSResObj()
-                    .addProperty("type", "error")
-                    .addProperty("cause", response.get("cause").asString)
-                    .build()
+                getErrorObjRes(response.get("cause").asString)
             } else {
-                WSResObj()
-                    .addProperty("type", "success")
-                    .addProperty("message", response.get("message").asString)
-                    .build()
+                getSuccessObjRes(response.get("message").asString)
             }
         }
 
         fun permanentBan(obj: Map<*, *>, isIpBan: Boolean = false): JsonObject {
-            val bumper = StringUtils.repeat("\n", 35)
+            //val bumper = StringUtils.repeat("\n", 35)
             val playerName = obj["player"].toString()
             val reason = obj["reason"].toString()
-            Logger.info("BANNING: $playerName")
-            Logger.info("REASON: $reason")
+
+            if (playerName.isBlank()) return getErrorObjRes("Player name cannot be empty!")
+            if (reason.isBlank()) return getErrorObjRes("Reason cannot be empty!")
+
+            //Logger.info("BANNING: $playerName")
+            //Logger.info("REASON: $reason")
             val type = if (isIpBan) BanList.Type.IP else BanList.Type.NAME
             return try {
                 if (Bukkit.getBanList(type).isBanned(playerName)) {
@@ -57,10 +61,15 @@ class Player {
 
         fun tempBan(obj: Map<*, *>, duration: Int, isIpBan: Boolean = false): JsonObject {
             if (duration < 1) return getErrorObjRes("Duration must be greater than 0")
-            val bumper = StringUtils.repeat("\n", 35)
+            //val bumper = StringUtils.repeat("\n", 35)
             val date = Date(System.currentTimeMillis() + duration * 60 * 1000)
+
             val playerName = obj["player"].toString()
             val reason = obj["reason"].toString()
+
+            if (playerName.isBlank()) return getErrorObjRes("Player name cannot be empty!")
+            if (reason.isBlank()) return getErrorObjRes("Reason cannot be empty!")
+
             val type = if (isIpBan) BanList.Type.IP else BanList.Type.NAME
             return try {
                 if (Bukkit.getBanList(type).isBanned(playerName)) {

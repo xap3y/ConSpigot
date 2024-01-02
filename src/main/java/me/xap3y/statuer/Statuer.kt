@@ -3,9 +3,7 @@ import me.xap3y.statuer.Commands.ReloadConfig
 import me.xap3y.statuer.Commands.UnbindPort
 import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Config.LoadConfig.Companion.LoadConfig
-import me.xap3y.statuer.Listeners.ChatListener
-import me.xap3y.statuer.Listeners.CommandListener
-import me.xap3y.statuer.Listeners.PlayerListener
+import me.xap3y.statuer.Listeners.*
 import me.xap3y.statuer.Utils.Lag
 import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.WS.WSServer
@@ -94,6 +92,8 @@ class Statuer : JavaPlugin() {
         getServer().pluginManager.registerEvents(PlayerListener(server!!), this)
         getServer().pluginManager.registerEvents(CommandListener(server!!), this)
         getServer().pluginManager.registerEvents(ChatListener(server!!), this)
+        getServer().pluginManager.registerEvents(GamemodeListener(server!!), this)
+        getServer().pluginManager.registerEvents(PunishListener(server!!), this)
 
     }
 

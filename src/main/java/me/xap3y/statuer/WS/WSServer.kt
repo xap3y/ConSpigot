@@ -6,12 +6,15 @@ import com.google.gson.*
 import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Statuer
 import me.xap3y.statuer.Utils.*
+import me.xap3y.statuer.Utils.Colors.Companion.colored
+import me.xap3y.statuer.Utils.PlayerActions.Companion.MakeOP
 import me.xap3y.statuer.Utils.ResObjs.Companion.getErrorObjRes
 import me.xap3y.statuer.Utils.ResObjs.Companion.getSuccessObjRes
 import me.xap3y.statuer.Utils.Worlds.Companion.getWorlds
 import me.xap3y.statuer.WS.modules.Player.Companion.kick
 import me.xap3y.statuer.WS.modules.Player.Companion.permanentBan
 import me.xap3y.statuer.WS.modules.Player.Companion.tempBan
+import org.bukkit.Bukkit
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
@@ -107,15 +110,26 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
             }
 
 
-        } else if (type == "command"){
-            if(!checkPass(obj["password"].toString(), conn)) return
-            if(Utils.executeCMD(obj["command"].toString())){
+        } else if (type == "command") {
+            if (!checkPass(obj["password"].toString(), conn)) return
+            if (Utils.executeCMD(obj["command"].toString())) {
                 //Logger.info("CMD EXECUTED")
 
                 sendToClient(conn, getSuccessObjRes("Command executed"))
             } else {
                 Logger.info("CMD FAILED")
                 sendToClient(conn, getErrorObjRes("Command execution failed"))
+            }
+
+
+        } else if (type == "make_playerOP") {
+            val player = obj["player"].toString()
+            if (player.isBlank()) return sendToClient(conn, getErrorObjRes("Player name cannot be empty!"))
+            val response = MakeOP(player)
+            if (response.get("error").asBoolean) {
+                sendToClient(conn, getErrorObjRes(response.get("cause").asString))
+            } else {
+                sendToClient(conn, getSuccessObjRes(response.get("message").asString))
             }
 
 
@@ -145,6 +159,14 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
         } else if (type == "get_offlinePlayers") {
             sendToClient(conn, getSuccessObjRes(PlayerList.getOfflinePlayers()))
+
+        } else if (type == "broadcast") {
+            if (obj["message"] == null || obj["message"].toString().isEmpty()) {
+                sendToClient(conn, getErrorObjRes("Message is not specified!"))
+            } else {
+                Bukkit.getServer().broadcastMessage(colored(obj["message"].toString()))
+                sendToClient(conn, getSuccessObjRes("Message broadcasted"))
+            }
 
         } else if (type == "get_info") {
             //Logger.info("GetINFO")

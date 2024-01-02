@@ -10,19 +10,18 @@ import org.bukkit.scheduler.BukkitRunnable
 @Suppress("FunctionName")
 class PlayerActions {
     companion object {
-        fun MakeOP(player: String): Boolean {
-            val onlinePlayer = Bukkit.getServer().getPlayer(player)
-            return if (onlinePlayer != null) {
-                //Utils.executeCMD("op $player")
-                onlinePlayer.isOp = true
-                true
+        fun MakeOP(player: String): JsonObject {
+            val onlinePlayer = Bukkit.getServer().getPlayerExact(player) ?: return getErrorObjRes("Player $player is not online!")
+            return if (onlinePlayer.isOp) {
+                getErrorObjRes("Player $player is already OP!")
             } else {
-                false
+                onlinePlayer.isOp = true
+                getSuccessObjRes("Player $player has been made OP!")
             }
         }
         @JvmStatic
         fun Kick(player: String, reason: String): JsonObject {
-            val onlinePlayer = Bukkit.getServer().getPlayer(player)
+            val onlinePlayer = Bukkit.getServer().getPlayerExact(player)
             return if (onlinePlayer != null) {
 
                 object : BukkitRunnable() {
