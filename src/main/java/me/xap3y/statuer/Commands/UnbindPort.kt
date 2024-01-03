@@ -11,7 +11,7 @@ class UnbindPort(private val plugin: Statuer) : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (command.name.equals("Portunbind", ignoreCase = true)) {
             if (sender.hasPermission("statuer.unbind") || sender.hasPermission("statuer.*")) {
-                plugin.unBindPort()
+                //plugin.unBindPort()
                 //Config?.messages?.first()?.ConfigReload ?: "&aConfig reloaded"
                 sender.sendMessage(Colors.colored("&aWebSocket port un-binded"))
             } else {

@@ -117,7 +117,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
                 sendToClient(conn, getSuccessObjRes("Command executed"))
             } else {
-                Logger.info("CMD FAILED")
+                //Logger.info("CMD FAILED")
                 sendToClient(conn, getErrorObjRes("Command execution failed"))
             }
 
@@ -249,7 +249,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
     fun broadcastMessage(obj: JsonObject? = null) {
         connectionAliveMap.keys.forEach { conn ->
             if (connectionAliveMap[conn] != true) {
-                Logger.info("Connection is not alive, skipping... (${conn.remoteSocketAddress}/${conn.protocol})")
+                //Logger.info("Connection is not alive, skipping... (${conn.remoteSocketAddress}/${conn.protocol})")
                 return@forEach
             }
             if (obj != null) {

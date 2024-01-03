@@ -46,7 +46,7 @@ class Statuer : JavaPlugin() {
         //Logger.info(Config?.messages?.first()?.ConfigReload ?: "&aConfig reloaded")
     }
 
-    fun unBindPort() {
+    /*fun unBindPort() {
         server?.stop(100)
         if (server != null) {
             server!!.stop(1000)
@@ -55,11 +55,11 @@ class Statuer : JavaPlugin() {
         server = null
         serverThread = null
 
-    }
+    }*/
 
     override fun onEnable() {
         getCommand("Statuer")?.executor = ReloadConfig(this)
-        getCommand("Portunbind")?.executor = UnbindPort(this)
+        //getCommand("Portunbind")?.executor = UnbindPort(this)
         dataFolder.mkdir()
 
         Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(this, Lag(), 100L, Lag.TICK_INTERVAL)
@@ -69,7 +69,7 @@ class Statuer : JavaPlugin() {
 
         if (Config != null) {
 
-            Logger.info(Config!!.socketAddress + " <<")
+            //Logger.info(Config!!.socketAddress + " <<")
 
             serverAddress = InetSocketAddress(Config!!.socketAddress, Config!!.socketPort)
 
@@ -98,7 +98,7 @@ class Statuer : JavaPlugin() {
     }
 
     override fun onDisable() {
-        Logger.info("&cGoodBye :((( ")
+        Logger.info("&cDisabling plugin...")
         server?.stop(200)
         server = null
         serverThread = null

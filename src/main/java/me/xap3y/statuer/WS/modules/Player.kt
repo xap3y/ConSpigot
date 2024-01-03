@@ -15,7 +15,7 @@ class Player {
             val playerName = obj["player"].toString()
             val reason = obj["reason"].toString()
 
-            Logger.info("REASON: $reason")
+            //Logger.info("REASON: $reason")
 
             if (playerName.isBlank()) return getErrorObjRes("Player name cannot be empty!")
             if (reason.isBlank()) return getErrorObjRes("Reason cannot be empty!")
@@ -42,19 +42,19 @@ class Player {
             val type = if (isIpBan) BanList.Type.IP else BanList.Type.NAME
             return try {
                 if (Bukkit.getBanList(type).isBanned(playerName)) {
-                    Logger.info("2")
+                    //Logger.info("2")
                     return getErrorObjRes("Player $playerName is already banned!")
                 }
 
-                Logger.info("1")
+                //Logger.info("1")
                 Bukkit.getBanList(type).addBan(playerName, reason, null, null)
                 if (Bukkit.getServer().getPlayer(playerName).isOnline) {
                     Kick(playerName, reason)
                 }
-                Logger.info("2")
+                //Logger.info("2")
                 getSuccessObjRes("Player $playerName has been successfully banned with reason: $reason")
             } catch (e: Exception) {
-                Logger.info("4")
+                //Logger.info("4")
                 getErrorObjRes(e.message.toString())
             }
         }

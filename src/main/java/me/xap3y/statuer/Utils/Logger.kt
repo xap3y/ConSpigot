@@ -1,6 +1,5 @@
 package me.xap3y.statuer.Utils
 
-import me.xap3y.statuer.Statuer
 import org.bukkit.Bukkit
 import java.io.File
 

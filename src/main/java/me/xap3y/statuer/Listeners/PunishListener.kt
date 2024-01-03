@@ -5,7 +5,6 @@ import me.xap3y.statuer.WS.WSServer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerKickEvent
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerGameModeChangeEvent
 
 class PunishListener(private val wsServer: WSServer) : Listener {
 
