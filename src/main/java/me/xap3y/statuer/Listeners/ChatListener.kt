@@ -8,11 +8,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent
 
 class ChatListener(private val wsServer: WSServer) : Listener {
     @EventHandler
-    fun onChat(event: AsyncPlayerChatEvent) {
+    fun onChat(e: AsyncPlayerChatEvent) {
         val obj = WSResObj()
             .addProperty("type", "event_chat")
-            .addProperty("player", event.player.name)
-            .addProperty("message", event.message)
+            .addProperty("player", e.player.name)
+            .addProperty("message", e.message)
             .build()
         wsServer.broadcastMessage(obj)
     }

@@ -94,6 +94,7 @@ class Statuer : JavaPlugin() {
         getServer().pluginManager.registerEvents(ChatListener(server!!), this)
         getServer().pluginManager.registerEvents(GamemodeListener(server!!), this)
         getServer().pluginManager.registerEvents(PunishListener(server!!), this)
+        getServer().pluginManager.registerEvents(FoodLevelChangeListener(server!!), this)
 
     }
 
