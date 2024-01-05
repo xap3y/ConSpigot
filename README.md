@@ -2,13 +2,13 @@
 
 Just a WebSocket creating bridge between minecraft server <br>
 
+https://www.spigotmc.org/resources/statuer.114330/
+
 ### How to use
 
 Drop in into your plugins folder and configure stuff you need in plugins/Statuer/config.json <br>
 If you disable password required in config, anyone can control your server and grief it <br> 
 
-### Commands
-`/statuer` - Reload configuration <br>
 
 ### Examples of usage
 

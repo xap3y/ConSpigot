@@ -20,8 +20,6 @@ import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
 import java.io.File
 import java.net.InetSocketAddress
-import java.security.MessageDigest
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -32,7 +30,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
             Logger.info("WS Opened, conn address: " + conn.remoteSocketAddress /* + " sending JSON: " + getAll().toString()*/)
         }
 
-        val token = sha512(UUID.randomUUID().toString())
+        //val token = sha512(UUID.randomUUID().toString())
         connectionAliveMap[conn] = false
 
         //Logger.info("WS TOKEN for conn $conn is $token")
@@ -40,7 +38,6 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         sendToClient(conn, WSResObj()
             .addProperty("type", "success")
             .addProperty("response", "con_opened")
-            .addProperty("token", token)
             .build()
         )
 
@@ -219,7 +216,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         return allInObj
     }
 
-    private fun sha512(input: String): String {
+    /*private fun sha512(input: String): String {
         return MessageDigest.getInstance("SHA-512")
             .digest(input.toByteArray())
             .joinToString(separator = "") {
@@ -227,7 +224,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
                     .toString(16)
                     .substring(1)
             }
-    }
+    }*/
 
     private fun checkPass(pass: String, conn: WebSocket? = null): Boolean {
         if (!Config.passRequired) return true

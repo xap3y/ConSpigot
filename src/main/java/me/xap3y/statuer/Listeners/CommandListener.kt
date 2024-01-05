@@ -16,7 +16,7 @@ class CommandListener(private val wsServer: WSServer, private val config: Config
         var obj = WSResObj()
             .addProperty("type", "event_command")
             .addProperty("player", e.player.name)
-        if(!config.chatMessageEvent.enabled) obj.addProperty("command", e.message)
+        if(config.chatMessageEvent.enabled) obj.addProperty("command", e.message)
         wsServer.broadcastMessage(obj.build())
     }
 
@@ -25,7 +25,7 @@ class CommandListener(private val wsServer: WSServer, private val config: Config
         if(!config.consoleCommandEvent.enabled) return
         var obj = WSResObj()
             .addProperty("type", "event_serverCommand")
-        if(!config.chatMessageEvent.enabled) obj.addProperty("command", e.command)
+        if(config.chatMessageEvent.enabled) obj.addProperty("command", e.command)
         wsServer.broadcastMessage(obj.build())
     }
 }
