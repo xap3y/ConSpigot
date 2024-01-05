@@ -35,3 +35,6 @@ On chat message: <br>
 
 <br>
 That is not all, I'm just lazy to add it all here
+
+### Build
+[![Java CI with Maven](https://github.com/xap3y/ConSpigot/actions/workflows/maven.yml/badge.svg)](https://github.com/xap3y/ConSpigot/actions/workflows/maven.yml)
