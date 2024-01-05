@@ -44,7 +44,76 @@ class LoadConfig {
                 currentPlayers = true,
                 cpuLoad = true,
                 uptime = true
-            )
+            ),
+            PlayerJoinEvent(
+                enabled = true,
+                playerInfoSettings = PlayerJoinPlayer(
+                    displayName = true,
+                    isOP = true,
+                    hostname = true,
+                    hostAddress = true,
+                    health = true,
+                    foodLevel = true,
+                    world = true,
+                    x = true,
+                    y = true,
+                    z = true,
+                    yaw = true,
+                    pitch = true
+                )
+            ),
+            PlayerQuitEvent(
+                enabled = true,
+                showDisplayName = true
+            ),
+            PlayerKickEvent(
+                enabled = true,
+                showReason = true
+            ),
+            PlayerGamemodeChangeEvent(
+                enabled = true,
+                showGamemode = true
+            ),
+            ChatMessageEvent(
+                enabled = true,
+                showMessage = true
+            ),
+            PlayerCommandEvent(
+                enabled = true,
+                showCommand = true
+            ),
+            ConsoleCommandEvent(
+                enabled = true,
+                showCommand = true
+            ),
+            FoodLevelChangeEvent(
+                enabled = true,
+                showDisplayName = true,
+                showHunger = true
+            ),
+            PlayerDeathEvent(
+                enabled = true,
+                playerInfoSettings = PlayerDeathEventPlayer(
+                    displayName = true,
+                    world = true,
+                    x = true,
+                    y = true,
+                    z = true,
+                    yaw = true,
+                    pitch = true
+                ),
+                killerInfoSettings = PlayerDeathEventKiller(
+                    displayName = true,
+                    health = true,
+                    foodLevel = true,
+                    world = true,
+                    x = true,
+                    y = true,
+                    z = true,
+                    yaw = true,
+                    pitch = true
+                )
+            ),
         )
         @JvmStatic
         fun LoadConfig(file: File): ConfigStructure? {

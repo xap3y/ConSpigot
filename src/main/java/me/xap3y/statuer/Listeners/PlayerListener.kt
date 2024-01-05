@@ -1,6 +1,7 @@
 package me.xap3y.statuer.Listeners
 
 import com.google.gson.JsonObject
+import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Utils.WSResObj
 import me.xap3y.statuer.WS.WSServer
 import org.bukkit.entity.Player
@@ -10,28 +11,32 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-class PlayerListener(private val wsServer: WSServer) : Listener {
+class PlayerListener(private val wsServer: WSServer, private val config: ConfigStructure) : Listener {
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         //Logger.info("Player joined")
-        val playerInfo = WSResObj()
+
+        if (!config.playerJoinEvent.enabled) return
+        val c = config.playerJoinEvent.playerInfoSettings
+        var playerInfo = WSResObj()
             .addProperty("name", e.player.name)
-            .addProperty("display_name", e.player.displayName)
-            .addProperty("op", e.player.isOp)
-            .addProperty("hostname", e.player.address.hostName)
-            .addProperty("host_address", e.player.address.address.hostAddress)
-            .addProperty("health", e.player.health)
-            .addProperty("food_level", e.player.foodLevel)
-            .addProperty("world", e.player.location.world.name)
-            .addProperty("x", String.format("%.3f", e.player.location.x).toDouble())
-            .addProperty("y", String.format("%.3f", e.player.location.y).toDouble())
-            .addProperty("z", String.format("%.3f", e.player.location.z).toDouble())
-            .addProperty("yaw", e.player.location.yaw)
-            .addProperty("pitch", e.player.location.pitch)
-            .build()
+
+        // Bruh this whole file is terrible but I don't know how to do it better
+        if(c.displayName) playerInfo = playerInfo.addProperty("display_name", e.player.displayName)
+        if(c.isOP) playerInfo.addProperty("op", e.player.isOp)
+        if(c.hostname) playerInfo.addProperty("hostname", e.player.address.hostName)
+        if(c.hostAddress) playerInfo.addProperty("host_address", e.player.address.address.hostAddress)
+        if(c.health) playerInfo.addProperty("health", e.player.health)
+        if(c.foodLevel) playerInfo.addProperty("food_level", e.player.foodLevel)
+        if(c.world) playerInfo.addProperty("world", e.player.location.world.name)
+        if(c.x) playerInfo.addProperty("x", String.format("%.3f", e.player.location.x).toDouble())
+        if(c.y) playerInfo.addProperty("y", String.format("%.3f", e.player.location.y).toDouble())
+        if(c.z) playerInfo.addProperty("z", String.format("%.3f", e.player.location.z).toDouble())
+        if(c.yaw) playerInfo.addProperty("yaw", e.player.location.yaw)
+        if(c.pitch) playerInfo.addProperty("pitch", e.player.location.pitch)
         val obj = WSResObj()
             .addProperty("type", "event_playerJoin")
-            .addArr("player_info", playerInfo)
+            .addArr("player_info", playerInfo.build())
             .build()
         wsServer.broadcastMessage(obj)
     }
@@ -39,51 +44,55 @@ class PlayerListener(private val wsServer: WSServer) : Listener {
     @EventHandler
     fun onPlayerQuit(e: PlayerQuitEvent) {
         //Logger.info("Player quit")
-        val playerInfo = WSResObj()
+        if(!config.playerQuitEvent.enabled) return
+        var playerInfo = WSResObj()
             .addProperty("name", e.player.name)
-            .addProperty("display_name", e.player.displayName)
-            .build()
+        if(config.playerQuitEvent.showDisplayName) playerInfo.addProperty("display_name", e.player.displayName)
+
         val obj = WSResObj()
             .addProperty("type", "event_playerQuit")
-            .addArr("player_info", playerInfo)
+            .addArr("player_info", playerInfo.build())
             .build()
         wsServer.broadcastMessage(obj)
     }
 
     @EventHandler
     fun onPlayerDeath(e: PlayerDeathEvent) {
+        if(!config.playerDeathEvent.enabled) return
+        val c = config.playerDeathEvent.playerInfoSettings
         val player = e.entity as Player
         val killer = player.killer
-        val playerInfo = WSResObj()
+        var playerInfo = WSResObj()
             .addProperty("name", player.name)
-            .addProperty("display_name", player.displayName)
-            .addProperty("world", player.location.world.name)
-            .addProperty("x", String.format("%.3f", player.location.x).toDouble())
-            .addProperty("y", String.format("%.3f", player.location.y).toDouble())
-            .addProperty("z", String.format("%.3f", player.location.z).toDouble())
-            .addProperty("yaw", player.location.yaw)
-            .addProperty("pitch", player.location.pitch)
-            .build()
 
-        var killerInfo: JsonObject? = null
+        if(c.displayName) playerInfo = playerInfo.addProperty("display_name", player.displayName)
+        if(c.world) playerInfo.addProperty("world", player.location.world.name)
+        if(c.x) playerInfo.addProperty("x", String.format("%.3f", player.location.x).toDouble())
+        if(c.y) playerInfo.addProperty("y", String.format("%.3f", player.location.y).toDouble())
+        if(c.z) playerInfo.addProperty("z", String.format("%.3f", player.location.z).toDouble())
+        if(c.yaw) playerInfo.addProperty("yaw", player.location.yaw)
+        if(c.pitch) playerInfo.addProperty("pitch", player.location.pitch)
+
+        var killerInfo: WSResObj? = null
         if (killer != null) {
+            val c = config.playerDeathEvent.killerInfoSettings
             killerInfo = WSResObj()
                 .addProperty("name", killer.name)
-                .addProperty("display_name", killer.displayName)
-                .addProperty("health", killer.player.health)
-                .addProperty("food_level", killer.player.foodLevel)
-                .addProperty("world", killer.location.world.name)
-                .addProperty("x", String.format("%.3f", killer.location.x).toDouble())
-                .addProperty("y", String.format("%.3f", killer.location.y).toDouble())
-                .addProperty("z", String.format("%.3f", killer.location.z).toDouble())
-                .addProperty("yaw", killer.location.yaw)
-                .addProperty("pitch", killer.location.pitch)
-                .build()
+
+            if(c.displayName) killerInfo = killerInfo.addProperty("display_name", killer.displayName)
+            if(c.health) killerInfo.addProperty("health", killer.health)
+            if(c.foodLevel) killerInfo.addProperty("health", killer.foodLevel)
+            if(c.world) killerInfo.addProperty("world", killer.location.world.name)
+            if(c.x) killerInfo.addProperty("x", String.format("%.3f", killer.location.x).toDouble())
+            if(c.y) killerInfo.addProperty("y", String.format("%.3f", killer.location.y).toDouble())
+            if(c.z) killerInfo.addProperty("z", String.format("%.3f", killer.location.z).toDouble())
+            if(c.yaw) killerInfo.addProperty("yaw", killer.location.yaw)
+            if(c.pitch) killerInfo.addProperty("pitch", killer.location.pitch)
         }
         var obj = WSResObj()
             .addProperty("type", "event_playerDeath")
-            .addArr("player_info", playerInfo)
-        if (killerInfo != null) obj.addArr("killer_info", killerInfo)
+            .addArr("player_info", playerInfo.build())
+        if (killerInfo != null) obj.addArr("killer_info", killerInfo.build())
         wsServer.broadcastMessage(obj.build())
     }
 }

@@ -6,7 +6,7 @@
 
     <groupId>me.xap3y</groupId>
     <artifactId>Statuer</artifactId>
-    <version>0.4</version>
+    <version>0.5</version>
     <packaging>jar</packaging>
 
     <name>Statuer</name>

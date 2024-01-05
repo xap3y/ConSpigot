@@ -1,8 +1,3 @@
 name: Statuer
 version: '${project.version}'
 main: me.xap3y.statuer.Statuer
-
-commands:
-  statuer:
-    description: Reloads the plugin configuration
-    usage: /statuer

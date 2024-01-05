@@ -1,4 +1,4 @@
-package me.xap3y.statuer.Commands
+/*package me.xap3y.statuer.Commands
 
 import me.xap3y.statuer.Statuer
 import me.xap3y.statuer.Utils.Colors
@@ -22,4 +22,4 @@ class ReloadConfig(private val plugin: Statuer) : CommandExecutor {
 
         return false
     }
-}
+}*/

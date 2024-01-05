@@ -1,6 +1,4 @@
 package me.xap3y.statuer
-import me.xap3y.statuer.Commands.ReloadConfig
-import me.xap3y.statuer.Commands.UnbindPort
 import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Config.LoadConfig.Companion.LoadConfig
 import me.xap3y.statuer.Listeners.*
@@ -21,7 +19,7 @@ class Statuer : JavaPlugin() {
 
     var Config: ConfigStructure? = null
 
-    fun reloadConfiguration() {
+    /*fun reloadConfiguration() {
 
         Config = LoadConfig(configFile)
 
@@ -33,6 +31,7 @@ class Statuer : JavaPlugin() {
         server = null;
         serverAddress = InetSocketAddress(Config!!.socketAddress, Config!!.socketPort)
         server = WSServer(serverAddress, Config!!, this)
+        server!!.isReuseAddr = true
         serverThread = Thread {
             //Logger.info(Config?.messages?.first()?.StartingWebsocket ?: "Websocket starting....")
             server?.start()
@@ -46,7 +45,7 @@ class Statuer : JavaPlugin() {
         //Logger.info(Config?.messages?.first()?.ConfigReload ?: "&aConfig reloaded")
     }
 
-    /*fun unBindPort() {
+    fun unBindPort() {
         server?.stop(100)
         if (server != null) {
             server!!.stop(1000)
@@ -58,7 +57,7 @@ class Statuer : JavaPlugin() {
     }*/
 
     override fun onEnable() {
-        getCommand("Statuer")?.executor = ReloadConfig(this)
+        //getCommand("Statuer")?.executor = ReloadConfig(this)
         //getCommand("Portunbind")?.executor = UnbindPort(this)
         dataFolder.mkdir()
 
@@ -74,6 +73,7 @@ class Statuer : JavaPlugin() {
             serverAddress = InetSocketAddress(Config!!.socketAddress, Config!!.socketPort)
 
             server = WSServer(serverAddress, Config!!, this)
+            server!!.isReuseAddr = true
 
             serverThread = Thread {
                 Logger.info(Config?.messages?.StartingWebsocket ?: "Websocket starting....")
@@ -89,12 +89,12 @@ class Statuer : JavaPlugin() {
             Logger.info("&cConfig file is null!")
         }
 
-        getServer().pluginManager.registerEvents(PlayerListener(server!!), this)
-        getServer().pluginManager.registerEvents(CommandListener(server!!), this)
-        getServer().pluginManager.registerEvents(ChatListener(server!!), this)
-        getServer().pluginManager.registerEvents(GamemodeListener(server!!), this)
-        getServer().pluginManager.registerEvents(PunishListener(server!!), this)
-        getServer().pluginManager.registerEvents(FoodLevelChangeListener(server!!), this)
+        getServer().pluginManager.registerEvents(PlayerListener(server!!, Config!!), this)
+        getServer().pluginManager.registerEvents(CommandListener(server!!, Config!!), this)
+        getServer().pluginManager.registerEvents(ChatListener(server!!, Config!!), this)
+        getServer().pluginManager.registerEvents(GamemodeListener(server!!, Config!!), this)
+        getServer().pluginManager.registerEvents(PunishListener(server!!, Config!!), this)
+        getServer().pluginManager.registerEvents(FoodLevelChangeListener(server!!, Config!!), this)
 
     }
 

@@ -1,20 +1,21 @@
 package me.xap3y.statuer.Listeners
 
+import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Utils.WSResObj
 import me.xap3y.statuer.WS.WSServer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerKickEvent
 import org.bukkit.event.Listener
 
-class PunishListener(private val wsServer: WSServer) : Listener {
+class PunishListener(private val wsServer: WSServer, private val config: ConfigStructure) : Listener {
 
     @EventHandler
     fun onPlayerKickEvent(e: PlayerKickEvent) {
-        val obj = WSResObj()
+        if (!config.playerKickEvent.enabled) return
+        var obj = WSResObj()
             .addProperty("type", "event_playerKick")
             .addProperty("player", e.player.name)
-            .addProperty("reason", e.reason)
-            .build()
-        wsServer.broadcastMessage(obj)
+        if (config.playerKickEvent.showReason) obj.addProperty("reason", e.reason)
+        wsServer.broadcastMessage(obj.build())
     }
 }
