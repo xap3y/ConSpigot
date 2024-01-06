@@ -5,7 +5,7 @@ import java.io.File
 
 class Logger {
     companion object {
-        private const val prefix = "[Statuser] ";
+        private const val prefix = "[Statuer] ";
         fun info(msg: String){
             log(prefix + msg)
         }

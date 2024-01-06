@@ -75,15 +75,15 @@ class Statuer : JavaPlugin() {
         server!!.isReuseAddr = true
 
         serverThread = Thread {
-            Logger.info(Config?.messages?.StartingWebsocket ?: "Websocket starting....")
+            if (Config!!.logLevel == 2) Logger.info(Config?.messages?.StartingWebsocket ?: "Websocket starting....")
             server?.start()
             Logger.info(
                 Config?.messages?.StartedWebsocket?.replace("%a", "&e(${Config!!.socketAddress}:${Config!!.socketPort})")
                     ?: "&a&lWebsocket started. &e(${Config!!.socketAddress}:${Config!!.socketPort})")
         }
-        Logger.info(Config?.messages?.startingThread ?: "Websocket thread starting....")
+        if (Config!!.logLevel == 2) Logger.info(Config?.messages?.startingThread ?: "Websocket thread starting....")
         serverThread?.start()
-        Logger.info(Config?.messages?.StartedThread ?: "&a&lWebsocket thread started.")
+        if (Config!!.logLevel == 2) Logger.info(Config?.messages?.StartedThread ?: "&a&lWebsocket thread started.")
 
         getServer().pluginManager.registerEvents(PlayerListener(server!!, Config!!), this)
         getServer().pluginManager.registerEvents(CommandListener(server!!, Config!!), this)

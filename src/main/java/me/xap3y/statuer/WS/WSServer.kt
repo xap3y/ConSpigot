@@ -26,9 +26,7 @@ import java.util.concurrent.ConcurrentHashMap
 class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, private val plugin: Statuer) : WebSocketServer(address) {
     private val connectionAliveMap = ConcurrentHashMap<WebSocket, Boolean>()
     override fun onOpen(conn: WebSocket, handshake: ClientHandshake) {
-        if (Config.logLevel == 2) {
-            Logger.info("WS Opened, conn address: " + conn.remoteSocketAddress /* + " sending JSON: " + getAll().toString()*/)
-        }
+        if (Config.logLevel == 2) Logger.info("[WS] Connection opened, conn address: " + conn.remoteSocketAddress /* + " sending JSON: " + getAll().toString()*/)
 
         //val token = sha512(UUID.randomUUID().toString())
         connectionAliveMap[conn] = false
@@ -53,9 +51,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
     override fun onClose(conn: WebSocket, code: Int, reason: String, remote: Boolean) {
         connectionAliveMap.remove(conn)
-        if (Config.logLevel == 2) {
-            Logger.info("WS Closed, conn address: " + conn.remoteSocketAddress)
-        }
+        if (Config.logLevel == 2) Logger.info("[WS] Connection closed, conn address: " + conn.remoteSocketAddress)
     }
 
     override fun onMessage(conn: WebSocket, message: String) {
@@ -66,6 +62,8 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
         //Logger.info("message: $message")
 
+        if (Config.logLevel == 2) Logger.info("[WS] Got message from &e${conn.remoteSocketAddress} &fmessage: &b$message")
+
         if (!checkPass(obj["password"].toString(), conn)) return
 
         val type = obj["type"].toString()
@@ -73,6 +71,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         if (type == "start_listener") {
             if (connectionAliveMap[conn] != true) {
                 connectionAliveMap[conn] = true
+                if (Config.logLevel == 2) Logger.info("[WS] Connection &e${conn.remoteSocketAddress} &fopened event listener")
                 sendToClient(
                     conn, getSuccessObjRes("listener started"))
             } else {
@@ -83,6 +82,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         } else if (type == "end_listener") {
             if (connectionAliveMap[conn] == true) {
                 connectionAliveMap[conn] = false
+                if (Config.logLevel == 2) Logger.info("[WS] Connection &e${conn.remoteSocketAddress} &fclosed event listener")
                 sendToClient(conn, getSuccessObjRes("listener stopped"))
             } else {
                 sendToClient(conn, getErrorObjRes("Listener is not running"))
@@ -91,12 +91,13 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
         } else if (type == "command") {
             if (!checkPass(obj["password"].toString(), conn)) return
-            if (Utils.executeCMD(obj["command"].toString())) {
+            val resObj = Utils.executeCMD(obj["command"].toString())
+            if (!resObj.get("error").asBoolean) {
                 //Logger.info("CMD EXECUTED")
-
                 sendToClient(conn, getSuccessObjRes("Command executed"))
             } else {
                 //Logger.info("CMD FAILED")
+                if (Config.logLevel > 1) Logger.info("[WS] &c${resObj.get("cause")}&r")
                 sendToClient(conn, getErrorObjRes("Command execution failed"))
             }
 
@@ -231,10 +232,14 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
                 //Logger.info("Connection is not alive, skipping... (${conn.remoteSocketAddress}/${conn.protocol})")
                 return@forEach
             }
-            if (obj != null) {
-                sendToClient(conn, obj)
+            if (conn.isOpen) {
+                if (obj != null) {
+                    sendToClient(conn, obj)
+                } else {
+                    sendToClient(conn, getAll())
+                }
             } else {
-                sendToClient(conn, getAll())
+                if (Config.logLevel == 2) Logger.info("[WS] Connection &e${conn.remoteSocketAddress} &fis not open, skipping...")
             }
         }
     }

@@ -63,6 +63,7 @@ class PlayerListener(private val wsServer: WSServer, private val config: ConfigS
         val killer = player.killer
         var playerInfo = WSResObj()
             .addProperty("name", player.name)
+            .addProperty("cause", player.lastDamageCause.cause.name)
 
         if(c.displayName) playerInfo = playerInfo.addProperty("display_name", player.displayName)
         if(c.world) playerInfo.addProperty("world", player.location.world.name)

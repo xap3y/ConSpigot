@@ -121,7 +121,7 @@ data class FoodLevelChangeEvent(
 data class PlayerDeathEvent(
     val enabled: Boolean,
     val playerInfoSettings: PlayerDeathEventPlayer,
-    val killerInfoSettings: PlayerDeathEventKiller
+    val killerInfoSettings: PlayerDeathEventKiller,
 )
 
 @Serializable
