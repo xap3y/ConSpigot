@@ -1,7 +1,6 @@
 package me.xap3y.statuer.WS.modules
 
 import com.google.gson.JsonObject
-import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.Utils.PlayerActions.Companion.Kick
 import me.xap3y.statuer.Utils.ResObjs.Companion.getErrorObjRes
 import me.xap3y.statuer.Utils.ResObjs.Companion.getSuccessObjRes

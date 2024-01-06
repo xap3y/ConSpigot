@@ -35,11 +35,7 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
 
         //Logger.info("WS TOKEN for conn $conn is $token")
 
-        sendToClient(conn, WSResObj()
-            .addProperty("type", "success")
-            .addProperty("response", "con_opened")
-            .build()
-        )
+        sendToClient(conn, getSuccessObjRes("Connection opened"))
 
         /*sendToClient(conn, getAll())
         val whileCon = Thread {
@@ -60,27 +56,13 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
         if (Config.logLevel == 2) {
             Logger.info("WS Closed, conn address: " + conn.remoteSocketAddress)
         }
-
-        sendToClient(conn, WSResObj()
-            .addProperty("type", "error")
-            .addProperty("cause", "con_closed")
-            .build()
-        )
     }
 
     override fun onMessage(conn: WebSocket, message: String) {
         //Logger.info("TPS:")
         //Logger.info(TPS.sendTPS().toString())
         //val token = connectionTokenMap[conn]
-        val obj = convertToJson(message)
-        if (obj == null) {
-            sendToClient(conn, WSResObj()
-                .addProperty("type", "error")
-                .addProperty("cause", "Invalid request!")
-                .build()
-            )
-            return
-        }
+        val obj = convertToJson(message) ?: return sendToClient(conn, getErrorObjRes("Invalid request!"))
 
         //Logger.info("message: $message")
 

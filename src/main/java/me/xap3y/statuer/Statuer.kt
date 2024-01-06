@@ -64,30 +64,26 @@ class Statuer : JavaPlugin() {
         Bukkit.getServer().scheduler.scheduleSyncRepeatingTask(this, Lag(), 100L, Lag.TICK_INTERVAL)
 
         Config = LoadConfig(configFile)
-        if (Config == null) Logger.info("&4There was error loading config file!!")
+        if (Config == null) return Logger.info("&4There was error loading config file!!")
 
-        if (Config != null) {
 
-            //Logger.info(Config!!.socketAddress + " <<")
+        //Logger.info(Config!!.socketAddress + " <<")
 
-            serverAddress = InetSocketAddress(Config!!.socketAddress, Config!!.socketPort)
+        serverAddress = InetSocketAddress(Config!!.socketAddress, Config!!.socketPort)
 
-            server = WSServer(serverAddress, Config!!, this)
-            server!!.isReuseAddr = true
+        server = WSServer(serverAddress, Config!!, this)
+        server!!.isReuseAddr = true
 
-            serverThread = Thread {
-                Logger.info(Config?.messages?.StartingWebsocket ?: "Websocket starting....")
-                server?.start()
-                Logger.info(
-                    Config?.messages?.StartedWebsocket?.replace("%a", "&e(${Config!!.socketAddress}:${Config!!.socketPort})")
-                        ?: "&a&lWebsocket started. &e(${Config!!.socketAddress}:${Config!!.socketPort})")
-            }
-            Logger.info(Config?.messages?.startingThread ?: "Websocket thread starting....")
-            serverThread?.start()
-            Logger.info(Config?.messages?.StartedThread ?: "&a&lWebsocket thread started.")
-        } else {
-            Logger.info("&cConfig file is null!")
+        serverThread = Thread {
+            Logger.info(Config?.messages?.StartingWebsocket ?: "Websocket starting....")
+            server?.start()
+            Logger.info(
+                Config?.messages?.StartedWebsocket?.replace("%a", "&e(${Config!!.socketAddress}:${Config!!.socketPort})")
+                    ?: "&a&lWebsocket started. &e(${Config!!.socketAddress}:${Config!!.socketPort})")
         }
+        Logger.info(Config?.messages?.startingThread ?: "Websocket thread starting....")
+        serverThread?.start()
+        Logger.info(Config?.messages?.StartedThread ?: "&a&lWebsocket thread started.")
 
         getServer().pluginManager.registerEvents(PlayerListener(server!!, Config!!), this)
         getServer().pluginManager.registerEvents(CommandListener(server!!, Config!!), this)
@@ -99,7 +95,7 @@ class Statuer : JavaPlugin() {
     }
 
     override fun onDisable() {
-        Logger.info("&cDisabling plugin...")
+        //Logger.info("&cDisabling plugin...")
         server?.stop(200)
         server = null
         serverThread = null

@@ -19,7 +19,6 @@ class Worlds {
                     .addProperty("difficulty", it.difficulty.toString())
                     .addProperty("playersNum", it.players.size)
                     .addArr("players", getFromList(it.players.toList()))
-                    .addProperty("entities", it.entities.size)
                     .addProperty("allowAnimals", it.allowAnimals)
                     .addProperty("allowMonsters", it.allowMonsters)
                     .addProperty("worldType", it.worldType.toString())

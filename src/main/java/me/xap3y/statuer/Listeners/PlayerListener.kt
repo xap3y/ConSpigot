@@ -1,6 +1,5 @@
 package me.xap3y.statuer.Listeners
 
-import com.google.gson.JsonObject
 import me.xap3y.statuer.Config.ConfigStructure
 import me.xap3y.statuer.Utils.WSResObj
 import me.xap3y.statuer.WS.WSServer
