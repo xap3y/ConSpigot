@@ -17,6 +17,5 @@ class ChatListener(private val wsServer: WSServer, private val config: ConfigStr
             .addProperty("message", e.message)
             .build()
         wsServer.broadcastMessage(obj)
-        wsServer.broadcastMessage(obj)
     }
 }

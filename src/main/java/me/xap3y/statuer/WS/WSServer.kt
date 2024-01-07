@@ -112,7 +112,6 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
                 sendToClient(conn, getSuccessObjRes(response.get("message").asString))
             }
 
-
         } else if (type == "player_kick") {
             sendToClient(conn, kick(obj))
 
@@ -129,16 +128,19 @@ class WSServer(address: InetSocketAddress, private val Config: ConfigStructure, 
             sendToClient(conn, tempBan(obj, obj["duration"].toString().toInt(), true))
 
         } else if (type == "get_ram") {
-            sendToClient(conn, getSuccessObjRes(CPUMEMusage.getMemObj()))
+            sendToClient(conn, getSuccessObjRes("ram", CPUMEMusage.getMemObj()))
 
         } else if (type == "get_tps") {
-            sendToClient(conn, getSuccessObjRes(TPS.sendTPS()))
+            sendToClient(conn, getSuccessObjRes("tps", TPS.sendTPS()))
 
         } else if (type == "get_onlinePlayers") {
-            sendToClient(conn, getSuccessObjRes(PlayerList.getOnlinePlayers()))
+            sendToClient(conn, getSuccessObjRes("onlinePlayers", PlayerList.getOnlinePlayers()))
 
         } else if (type == "get_offlinePlayers") {
-            sendToClient(conn, getSuccessObjRes(PlayerList.getOfflinePlayers()))
+            sendToClient(conn, getSuccessObjRes("offlinePlayers", PlayerList.getOfflinePlayers()))
+
+        } else if (type == "get_maxPlayers") {
+            sendToClient(conn, getSuccessObjRes("maxPlayers", Bukkit.getServer().maxPlayers.toString()))
 
         } else if (type == "broadcast") {
             if (obj["message"] == null || obj["message"].toString().isEmpty()) {

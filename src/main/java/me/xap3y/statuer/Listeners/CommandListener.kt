@@ -1,7 +1,6 @@
 package me.xap3y.statuer.Listeners
 
 import me.xap3y.statuer.Config.ConfigStructure
-import me.xap3y.statuer.Utils.Logger
 import me.xap3y.statuer.Utils.WSResObj
 import me.xap3y.statuer.WS.WSServer
 import org.bukkit.event.EventHandler

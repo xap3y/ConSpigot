@@ -32,5 +32,29 @@ class ResObjs {
                 .addArr("message", message)
                 .build()
         }
+
+        fun getSuccessObjRes(type: String, message: JsonArray): JsonObject {
+            return WSResObj()
+                .addProperty("error", false)
+                .addProperty("type", type)
+                .addArr("message", message)
+                .build()
+        }
+
+        fun getSuccessObjRes(type: String, message: JsonObject): JsonObject {
+            return WSResObj()
+                .addProperty("error", false)
+                .addProperty("type", type)
+                .addArr("message", message)
+                .build()
+        }
+
+        fun getSuccessObjRes(type: String, message: String): JsonObject {
+            return WSResObj()
+                .addProperty("error", false)
+                .addProperty("type", type)
+                .addProperty("message", message)
+                .build()
+        }
     }
 }
